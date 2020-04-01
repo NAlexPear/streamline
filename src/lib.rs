@@ -77,7 +77,7 @@ where
     }
 }
 
-#[async_trait]
+#[async_trait(?Send)]
 pub trait State: Clone + fmt::Debug + Default + PartialEq {
     type Context;
     type Error;

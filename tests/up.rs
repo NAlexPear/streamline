@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use futures::StreamExt;
-use streamline::{Progress, State, Streamline};
+use strmline::{Progress, State, Streamline};
 use tokio::runtime::Runtime;
 
 #[test]
@@ -21,7 +21,7 @@ fn completes_up() {
         }
     }
 
-    #[async_trait]
+    #[async_trait(?Send)]
     impl State for MyState {
         type Context = Context;
         type Error = ();

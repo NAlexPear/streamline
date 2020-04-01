@@ -4,6 +4,8 @@ version = "0.0.1"
 authors = ["Alex Pearson <alex@alexpear.com>"]
 edition = "2018"
 license = "MIT"
+repository = "https://github.com/NAlexPear/streamline"
+description = "Reversible futures::Stream-based state machines"
 
 [lib]
 doctest = false

@@ -1,11 +1,17 @@
 [package]
 name = "streamline"
-version = "0.0.3"
+version = "0.0.4"
 authors = ["Alex Pearson <alex@alexpear.com>"]
 edition = "2018"
 license = "MIT"
+readme = "README.md"
 repository = "https://github.com/NAlexPear/streamline"
 description = "Reversible futures::Stream-based state machines"
+keywords = ["futures", "streams", "state-machines"]
+
+[badges]
+github = { repository = "NAlexPear/streamline" } 
+maintenance = { status = "actively-developed" }
 
 [lib]
 doctest = false

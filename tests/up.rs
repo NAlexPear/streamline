@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use futures::StreamExt;
-use strmline::{Progress, State, Streamline};
+use streamline::{Progress, State, Streamline};
 use tokio::runtime::Runtime;
 
 #[test]

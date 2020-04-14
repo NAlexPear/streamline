@@ -5,7 +5,6 @@ use tokio::runtime::Runtime;
 
 #[test]
 fn completes_up() {
-    #[derive(Debug)]
     struct Context;
 
     #[derive(Clone, Debug, PartialEq)]
@@ -13,12 +12,6 @@ fn completes_up() {
         Start,
         Middle(String),
         End(String),
-    }
-
-    impl Default for MyState {
-        fn default() -> Self {
-            Self::Start
-        }
     }
 
     #[async_trait(?Send)]

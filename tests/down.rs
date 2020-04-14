@@ -5,7 +5,6 @@ use tokio::runtime::Runtime;
 
 #[test]
 fn completes_down() {
-    #[derive(Debug)]
     struct Context;
 
     #[allow(dead_code)]
@@ -14,12 +13,6 @@ fn completes_down() {
         Start,
         Middle(String),
         End(String),
-    }
-
-    impl Default for MyState {
-        fn default() -> Self {
-            Self::Start
-        }
     }
 
     #[derive(Debug, PartialEq)]

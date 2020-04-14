@@ -38,7 +38,7 @@ impl State for MyState {
   type Error = MyError;
 
   // every state needs to be mapped to the next
-  async fn next(&self, context: Option<&Self::Context>) -> Result<Option<Self>, Self::Error> {
+  async fn next(&self, context: Option<&mut Self::Context>) -> Result<Option<Self>, Self::Error> {
     let context = context.ok_or_else(|_| Box::new("No context supplied!"))?;
 
     let next_state = match self {
@@ -63,7 +63,7 @@ impl State for MyState {
   }
 
   // optionally, old states can be cleaned up if something goes wrong
-  async fn revert(&self, context: Option<&Self::Context>) -> Result<Option<Self>, Self::Error> {
+  async fn revert(&self, context: Option<&mut Self::Context>) -> Result<Option<Self>, Self::Error> {
     let context = context.ok_or_else(|_| Box::new("No context supplied!"))?;
 
     let next_state = match self {

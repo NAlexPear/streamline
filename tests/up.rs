@@ -21,7 +21,7 @@ fn completes_up() {
 
         async fn next(
             &self,
-            _context: Option<&Self::Context>,
+            _context: Option<&mut Self::Context>,
         ) -> Result<Option<Self>, Self::Error> {
             let next_state = match self {
                 MyState::Start => Some(Self::Middle("hooray!".into())),
@@ -34,7 +34,7 @@ fn completes_up() {
 
         async fn revert(
             &self,
-            _context: Option<&Self::Context>,
+            _context: Option<&mut Self::Context>,
         ) -> Result<Option<Self>, Self::Error> {
             let next_state = match self {
                 MyState::End(content) => Some(Self::Middle(content.to_string())),

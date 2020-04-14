@@ -13,11 +13,11 @@ pub trait State: Clone + PartialEq {
     /// between user states must be explicit. If `Err(Self::Error)` is returned from this method,
     /// the reversion process is triggered. If `Ok(None)` is returned, the `Streamline` ends. If
     /// `Ok(Some(Self))` is returned, the stream continues to the next iteration of `next`
-    async fn next(&self, context: Option<&Self::Context>) -> Result<Option<Self>, Self::Error>;
+    async fn next(&self, context: Option<&mut Self::Context>) -> Result<Option<Self>, Self::Error>;
 
     /// Handles the mapping between a state and its previous state in the case of reversion on
     /// `Err` from `next()`. By default, `revert` simply ends the `Streamline`
-    async fn revert(&self, _context: Option<&Self::Context>) -> Result<Option<Self>, Self::Error> {
+    async fn revert(&self, _context: Option<&mut Self::Context>) -> Result<Option<Self>, Self::Error> {
         Ok(None)
     }
 }

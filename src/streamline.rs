@@ -56,7 +56,7 @@ where
 
     async fn reduce(state_machine: Option<Self>) -> Option<(Progress<S, E, C>, Option<Self>)> {
         if let Some(mut state_machine) = state_machine {
-            let context = state_machine.context.as_ref();
+            let context = state_machine.context.as_mut();
             let next_state = match &state_machine.current {
                 Progress::Ok(inner) => {
                     let cancellation_handle = match state_machine.cancellation_handle {

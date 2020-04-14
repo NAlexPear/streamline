@@ -4,10 +4,10 @@ use streamline::{Progress, RevertProgress, State, Streamline};
 use tokio::runtime::Runtime;
 
 #[test]
-fn completes_down() {
+fn cancels() {
+    #[derive(Debug)]
     struct Context;
 
-    #[allow(dead_code)]
     #[derive(Clone, Debug, PartialEq)]
     enum MyState {
         Start,
@@ -29,7 +29,7 @@ fn completes_down() {
         ) -> Result<Option<Self>, Self::Error> {
             let next_state = match self {
                 MyState::Start => Some(Self::Middle("hooray!".into())),
-                MyState::Middle(_) => return Err(MyError("Something went wrong!")),
+                MyState::Middle(content) => Some(Self::End(content.into())),
                 _ => None,
             };
 
@@ -51,21 +51,31 @@ fn completes_down() {
     }
 
     Runtime::new().unwrap().block_on(async {
-        let states: Vec<_> = Streamline::build(MyState::Start)
+        let (streamline, cancellation_handle) = Streamline::build(MyState::Start)
             .context(Context)
-            .run()
-            .collect()
-            .await;
+            .run_preemptible();
 
-        match states.first() {
-            Some(Progress::Ok(state)) => assert_eq!(state, &MyState::Start),
+        let mut stream = streamline.boxed_local();
+
+        let next_step = stream.next().await;
+
+        match next_step {
+            Some(Progress::Ok(state)) => assert_eq!(&state, &MyState::Start),
             _ => panic!("incorrect start state found"),
         };
 
-        match states.last() {
-            Some(Progress::Revert(RevertProgress::Reverted {
-                source: Some(source),
-            })) => assert_eq!(**source, MyError("Something went wrong!")),
+        cancellation_handle.cancel().expect("could not send value through channel");
+
+        let mut last_step = Progress::Ok(MyState::Start);
+
+        while let Some(step) = stream.next().await {
+            last_step = step;
+        }
+
+        match last_step {
+            Progress::Revert(RevertProgress::Reverted { source }) => {
+                assert_eq!(source, None)
+            }
             _ => panic!("incorrect terminal state found"),
         }
     });

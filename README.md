@@ -110,9 +110,11 @@ If one wants to move from one state to the next within a process, it makes sense
 1. _Non-blocking state updates_: it's often the case that we care _most_ about the final state of a state machine, but we would also like to be updated when the state changes along the way to that terminal state. In state machines, this is often implemented as a side effect (e.g. through channels or an event broker).
 2. _Super-statefulness_: while it's common to carry state around inside individual variants of an `enum`, it's much trickier to know when to handle updates to state that is not directly attached to a single variant of the state machine. How does one, for example, handle updating a value in a database as a state machine progresses? What about interacting with third-party services? When should these parts of state be handled?
 3. _Reversibility_: most processes need to know how to clean up after themselves. Modeling these fallible processes _and_ their path towards full reversion to the original state (or failure to do so) is a complex and boilerplate-heavy process.
+4. _Cancellation_: interrupting the execution of a `Stream` is easy... just drop the `Stream`! But cleaning up after a stream that represents some in-progress state is much more difficult.
 
 `streamline` solves addresses those problems in the following ways:
 
 1. _`futures::Stream`-compatibility_: rather than using side effects during state machine execution, this library models every update to a state machine as an `Item` in a `std::futures::Stream`.
 2. _Consistent `Context`_: all super-variant state can be accessed with a consistent `Context`.
 3. _Automatic Reversion_: whenever a process returns an `Err`, `streamline` will (optionally) revert all the states up to that point, returning the original error.
+4. _Manual Cancellation_: the `run_preemptible` method returns a `Stream` _and_ a `Cancel` handler that can be used to trigger the revert process of a working stream.

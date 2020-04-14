@@ -11,18 +11,18 @@ where
     Reverting {
         /// the state variant in the process of being reverted
         step: S,
-        /// the original error that triggered the reversion process
-        source: Arc<E>,
+        /// the original error that triggered the reversion process, if one exists
+        source: Option<Arc<E>>,
     },
     /// The final state of a successful reversion
     Reverted {
         /// the original error that triggered the reversion process
-        source: Arc<E>,
+        source: Option<Arc<E>>,
     },
     /// The final state of a failed reversion
     Failure {
         /// the original error that triggered the reversion process
-        source: Arc<E>,
+        source: Option<Arc<E>>,
         /// the error that caused the reversion process to fail
         error: E,
     },

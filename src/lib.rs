@@ -4,6 +4,7 @@ groups sources of external state into a single `Context`, and handles automatic 
 (both forwards and backwards) through the `State` trait.
 */
 #![deny(missing_docs, unreachable_pub)]
+mod cancel;
 mod progress;
 mod state;
 mod streamline;

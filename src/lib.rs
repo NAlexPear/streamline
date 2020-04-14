@@ -9,6 +9,7 @@ mod progress;
 mod state;
 mod streamline;
 
+pub use self::cancel::Cancel;
 pub use self::progress::*;
 pub use self::state::*;
 pub use self::streamline::*;
